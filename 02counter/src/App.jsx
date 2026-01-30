@@ -10,14 +10,16 @@ function App() {
 //let counter = 5
 const addvalue = () =>{
   console.log("button clicked",counter);
+
    //counter = counter + 1
    setcounter(counter + 1)
 
 }
 const removevalue = () =>{
   console.log("button clicked",counter);
+  if(counter>0){
    //counter = counter - 1
-   setcounter (counter - 1)}
+   setcounter (counter - 1)}}
   return (
     <>
       <h1>Vite + React</h1>
