@@ -34,10 +34,10 @@ function App() {
       className="w-screen h-screen flex flex-wrap justify-center items-center bg-cover bg-no-repeat"
       style={{
         backgroundImage:
-          "url('https://images.pexels.com/photos/3532540/pexels-photo-3532540.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
+          "url('https://images.pexels.com/photos/34926383/pexels-photo-34926383.jpeg')",
       }}
     >
-      <div className="w-full">
+      <div className="w-[600px] h-[800px] flex justify-center items-center">
         <div className="w-full max-w-md mx-auto border rounded-lg p-5 backdrop-blur-sm bg-white/30">
           <form
             onSubmit={(e) => {
