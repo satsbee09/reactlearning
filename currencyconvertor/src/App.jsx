@@ -58,7 +58,7 @@ function App() {
             </div>
 
             {/* SWAP BUTTON */}
-            <div className="relative w-full h-0.5">
+            <div className="relative w-full h-0.6">
               <button
                 type="button"
                 onClick={swap}
