@@ -2,15 +2,22 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Header from './components/Header/Header'
+import Home from './components/Home/Home'
+import Contactus from './components/Contactus/Contactus'    
+import Aboutus from './components/AboutUs/Aboutus'
+
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="bg-blue-500 text-white p-4 rounded-lg">
-        <h1 className="text-2xl font-bold">Welcome to My App</h1>
-      </div>
+      <Header/>
+      <Home/>
+      <Footer/>
+      <Contactus/>
+      <Aboutus/>  
     </>
   )
 }
