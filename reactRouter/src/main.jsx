@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, Router, RouterProvider  } from "react-router-dom";
 import Layout from "./Layout";
 import Home from "./components/Home/Home";
 import Contactus from "./components/Contactus/Contactus";
 import Aboutus from "./components/AboutUs/Aboutus";
+import User from "./components/User/User";
 
-const router = createBrowserRouter([
+/*const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
@@ -26,7 +27,17 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+]);*/
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<Layout />}>
+      <Route path='' element={<Home />} />
+      <Route path='aboutus' element={<Aboutus />} />
+      <Route path='contactus' element={<Contactus />} />
+      <Route path='User' element={<User />} />
+    </Route>
+  )
+);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
