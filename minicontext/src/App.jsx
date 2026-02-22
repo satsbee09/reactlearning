@@ -1,13 +1,15 @@
 import './App.css'
-import Login from './component/login'
+import Login from './component/Login'
+import Profile from './component/Profile'
+import UserContextProvider from './context/UserContextProvider'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    < userContextProvider>
-      <h1>hello</h1>
-    </ userContextProvider>
+    <UserContextProvider>
+      <h1>Hello</h1>
+      <Login />
+      <Profile />
+    </UserContextProvider>
   )
 }
 
