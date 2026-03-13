@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold text-center">My Todo List</h1>
+      <h1 className="text-3xl font-bold text-center">hello ,My Todo List</h1>
     </>
   )
 }
