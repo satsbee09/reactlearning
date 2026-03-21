@@ -3,13 +3,14 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { TodoProvider } from './contexts/TodoContext';
+import { useEffect } from 'react';
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const addTodos=(todo)=>{
+  const addTodo=(todo)=>{
     setTodos((prev)=>[{id:Date.now(),...todo},...prev])
   }
-  const updatedTodo=(id,todo)=>{
+  const updateTodo=(id,todo)=>{
     setTodos((prev)=>prev.map((t)=>(t.id===id?t:prev)))
   }
   const deleteTodo=(id)=>{
@@ -17,10 +18,19 @@ function App() {
 
   }
   const toggleComplete=(id)=>{
-
+    setTodos((prev) => prev.map((prevTodo) => prevTodo===id?{...prevTodo,completed:!prevTodo.completed}:prevTodo))
   }
+  useEffect(()=>{
+    const todos =JSON.parse(localStorage.getItem("todos"))
+    if (todos && todos.length>0){
+      setTodos(todos)
+    }
+  },[])
+  useEffect(()=>{
+    localStorage.setItem("todos",JSON.stringify(todos))
+  },[todos])
   return (
-    <TodoProvider value={{todos,addTodo,updatedTodo,deleteTodo,toggleComplete}}>
+    <TodoProvider value={{todos,addTodo,updateTodo,deleteTodo,toggleComplete}}>
       <h1 className="text-3xl font-bold text-center">hello ,My Todo List</h1>
       <div className="bg-[#172842] min-h-screen py-8">
                 <div className="w-full max-w-2xl mx-auto shadow-md rounded-lg px-4 py-3 text-white">
