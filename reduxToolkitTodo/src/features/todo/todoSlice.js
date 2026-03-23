@@ -1,6 +1,14 @@
 import {createSlice,nanoid} from '@reduxjs/toolkit';
+const loadState = () => {
+  try {
+    const data = localStorage.getItem("todos");
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
 const initialState={
-    todos:[{id:1,text:"hello World"}]
+    todos: loadState().length > 0 ? loadState() : [{id:1,text:"Hello World"}]
 }
 export const todoSlice=createSlice({
     name:'todo',
