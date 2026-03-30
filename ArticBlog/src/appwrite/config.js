@@ -1,4 +1,4 @@
-import conf from '../conf.js';
+import conf from '../conf/conf.js';
 import { Client,Account,ID,Databases,Storage,Query } from 'appwrite';
 export class Service{
     client=new Client();
@@ -24,20 +24,23 @@ export class Service{
         catch(err){
             throw err;}
     }
-    async updatePost(slug,{title,slug,content ,featuredImage,status,}){
-        try{
-            return await this.databases.updateDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,
-            {
-                title,
-                content,    
-                featuredImage,
-                status,
-                });
+    async updatePost(slug, { title, content, featuredImage, status }) {
+        try {
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                slug,
+                {
+                    title,
+                    content,
+                    featuredImage,
+                    status,
+                }
+            );
+        } catch (err) {
+            throw err;
         }
-        catch(err){
-            throw err;}
- 
-        }
+    }
     async deletePost(slug){
         try{
             return await this.databases.deleteDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug

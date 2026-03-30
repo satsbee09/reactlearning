@@ -37,13 +37,13 @@ async login({email,password}){
     catch(err){
         throw err;
 }}
- async getcurrentUser(){ try {
-    return await this.account.get();
-  } catch (err) {
-    throw err;
+ async getCurrentUser(){
+    try {
+      return await this.account.get();
+    } catch (err) {
+      return null;
+    }
   }
-  return null;
-}
 async logout(){
     try{
         await this.account.deleteSessions("current");

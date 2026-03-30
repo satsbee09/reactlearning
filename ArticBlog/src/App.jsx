@@ -1,16 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import authService from './appwrite/auth';
+import { login, logout } from './store/authSlice';
+import { header as Header, footer as Footer } from './component/index';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+ const [loading, setLoading] = useState(true);
 
-  return (
-    <>
-    <h1>Hello World</h1>
-      </>
+ const dispatch = useDispatch();
+ useEffect(() => {
+    authService
+      .getCurrentUser()
+      .then((userData) => {
+        if (userData) {
+          dispatch(login({ userData }));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .catch(() => {
+        dispatch(logout());
+      })
+      .finally(() => setLoading(false));
+  }, [dispatch]);
+
+  if(loading){
+
+    return <div>Loading...</div>
+  }
+
+  return (<div className='min-h-screen flex-wrap content-between bg-gray-400'>
+      <h1>ArticBlog</h1>
+      <div className='w-full block'>
+        <Header />
+        <main>
+          <h2>Content</h2>
+        </main>
+        <Footer />
+      </div>
+    </div>
   )
 }
 
