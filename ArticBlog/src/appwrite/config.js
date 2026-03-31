@@ -7,22 +7,31 @@ export class Service{
     constructor(){
         this.client
         .setEndpoint(conf.appwriteUrl)
-        .setProject(conf.appwritePrjectId)
+        .setProject(conf.appwriteProjectId)
         this.databases=new Databases(this.client);
         this.bucket=new Storage(this.client);
     }
     async createPost({title,slug,content ,featuredImage,status,userId}){
         try{
-            return await this.databases.createDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,
-            {
-                title,
-                content,    
-                featuredImage,
-                status,
-                userId,});
+            return await this.databases.createDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                ID.unique(),
+                {
+                    title,
+                    slug,
+                    content,
+                    featuredImage,
+                    status,
+                    userId,
+                },
+                ['role:all'],
+                ['user:current'],
+            );
         }
         catch(err){
-            throw err;}
+            throw err;
+        }
     }
     async updatePost(slug, { title, content, featuredImage, status }) {
         try {
@@ -76,8 +85,13 @@ export class Service{
 //file upload
 async uploadFile(file){
     try{
-        return await this.bucket.createFile(conf.appwriteBucketId,ID.unique(),file);
-        return true;
+        return await this.bucket.createFile(
+            conf.appwriteBucketId,
+            ID.unique(),
+            file,
+            ['role:all'],
+            ['user:current'],
+        );
     }
     catch(err){
         throw err;

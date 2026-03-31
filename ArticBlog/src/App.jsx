@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import authService from './appwrite/auth';
 import { login, logout } from './store/authSlice';
-import { header as Header, footer as Footer } from './component/index';
+import { Header, Footer } from './component/index.js';
 import './App.css'
 
 function App() {
@@ -25,20 +26,23 @@ function App() {
       .finally(() => setLoading(false));
   }, [dispatch]);
 
-  if(loading){
-
-    return <div>Loading...</div>
+  if (loading) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-slate-950 text-slate-100'>
+        <p className='text-lg font-semibold'>Loading...</p>
+      </div>
+    )
   }
 
-  return (<div className='min-h-screen flex-wrap content-between bg-gray-400'>
-      <h1>ArticBlog</h1>
-      <div className='w-full block'>
-        <Header />
-        <main>
-          <h2>Content</h2>
-        </main>
-        <Footer />
-      </div>
+  return (
+    <div className='min-h-screen flex flex-col bg-slate-950 text-slate-100'>
+      <Header />
+      <main className='flex-1 px-4 py-8 sm:px-6 lg:px-8'>
+        <div className='mx-auto w-full max-w-7xl'>
+          <Outlet />
+        </div>
+      </main>
+      <Footer />
     </div>
   )
 }

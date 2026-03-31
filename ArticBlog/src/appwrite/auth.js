@@ -30,8 +30,7 @@ async createAccount({email,password,name}){
 }
 async login({email,password}){
     try{
-        return await this.account.createEmailSession(email,password);
-
+        return await this.account.createEmailPasswordSession({ email, password });
 
     }
     catch(err){
