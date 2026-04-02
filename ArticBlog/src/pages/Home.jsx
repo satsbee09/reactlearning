@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import appwriteService from '../appwrite/config'
 import { Container, PostCard } from '../component'
 
@@ -19,14 +21,29 @@ const features = [
 
 function Home() {
   const [posts, setPosts] = useState([])
+  const [error, setError] = useState('')
+  const authStatus = useSelector((state) => state.auth.status)
 
   useEffect(() => {
-    appwriteService.getPosts().then((posts) => {
-      if (posts) {
-        setPosts(posts.documents)
-      }
-    })
-  }, [])
+    if (!authStatus) {
+      setPosts([])
+      setError('')
+      return
+    }
+
+    appwriteService.getPosts()
+      .then((posts) => {
+        if (posts) {
+          setPosts(posts.documents)
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load home posts:', err)
+        setError(err.message || 'Unable to load posts. Please login or check permissions.')
+      })
+  }, [authStatus])
+
+  const latestPosts = posts.slice(0, 4)
 
   return (
     <div className='w-full py-8'>
@@ -70,17 +87,29 @@ function Home() {
           </div>
         </section>
 
-        {posts.length === 0 ? (
+        {error ? (
+          <div className='rounded-[28px] border border-red-700/70 bg-red-950/80 p-10 text-center text-red-200 shadow-xl'>
+            <h2 className='text-2xl font-semibold'>Unable to load posts</h2>
+            <p className='mt-3 max-w-xl mx-auto text-sm text-red-300'>{error}</p>
+          </div>
+        ) : posts.length === 0 ? (
           <div className='rounded-[28px] border border-slate-700/70 bg-slate-950/80 p-10 text-center text-slate-200 shadow-xl'>
             <h2 className='text-2xl font-semibold'>Login to read posts</h2>
             <p className='mt-3 max-w-xl mx-auto text-sm text-slate-400'>Sign in to unlock the full community feed and access published articles.</p>
           </div>
         ) : (
-          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-            {posts.map((post) => (
-              <PostCard key={post.$id} {...post} />
-            ))}
-          </div>
+          <>
+            <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
+              {latestPosts.map((post) => (
+                <PostCard key={post.$id} {...post} />
+              ))}
+            </div>
+            {posts.length > latestPosts.length && (
+              <div className='mt-8 text-center'>
+                <Link to='/all-posts' className='text-sky-400 hover:underline'>View all posts</Link>
+              </div>
+            )}
+          </>
         )}
       </Container>
     </div>

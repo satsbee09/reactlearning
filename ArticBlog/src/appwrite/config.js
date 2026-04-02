@@ -1,5 +1,5 @@
 import conf from '../conf/conf.js';
-import { Client,Account,ID,Databases,Storage,Query } from 'appwrite';
+import { Client, Account, ID, Databases, Storage, Query, Permission, Role } from 'appwrite';
 export class Service{
     client=new Client();
     databases;
@@ -13,21 +13,19 @@ export class Service{
     }
     async createPost({title,slug,content ,featuredImage,status,userId}){
         try{
-            return await this.databases.createDocument(
-                conf.appwriteDatabaseId,
-                conf.appwriteCollectionId,
-                ID.unique(),
-                {
+            return await this.databases.createDocument({
+                databaseId: conf.appwriteDatabaseId,
+                collectionId: conf.appwriteCollectionId,
+                documentId: ID.unique(),
+                data: {
                     title,
-                    slug,
                     content,
                     featuredImage,
                     status,
                     userId,
                 },
-                ['role:all'],
-                ['user:current'],
-            );
+                permissions: [Permission.read(Role.any()), Permission.write(Role.user(userId))],
+            });
         }
         catch(err){
             throw err;
@@ -85,38 +83,34 @@ export class Service{
 //file upload
 async uploadFile(file){
     try{
-        return await this.bucket.createFile(
-            conf.appwriteBucketId,
-            ID.unique(),
+        return await this.bucket.createFile({
+            bucketId: conf.appwriteBucketId,
+            fileId: ID.unique(),
             file,
-            ['role:all'],
-            ['user:current'],
-        );
+            permissions: [Permission.read(Role.any())]
+        });
     }
     catch(err){
         throw err;
-        return null;
-    }   }
-    async deletefile(fileId){
+    }
+    }
+    async deleteFile(fileId){
         try{
             await this.bucket.deleteFile(conf.appwriteBucketId,fileId);
             return true;
         }
         catch(err){
             throw err;
-            return false;
         }
-}
-async getFilePreview(fileId){
-    try{
-        return this.bucket.getFilePreview(conf.appwriteBucketId,fileId);
-        return true;
-    }   
-    catch(err){
-        throw err;
-        return false;
     }
-}
+    async getFilePreview(fileId){
+        try{
+            return this.bucket.getFilePreview(conf.appwriteBucketId,fileId);
+        }
+        catch(err){
+            throw err;
+        }
+    }
 }
 
 
